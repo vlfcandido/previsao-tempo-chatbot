@@ -1,14 +1,16 @@
 {
-  "name": "lumina-lambda-ngrok",
+  "name": "previsao-tempo-chatbot",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "test": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "description": "",
+  "license": "MIT",
+  "description": "Microserviço de previsão do tempo para consumo por chatbot",
   "dependencies": {
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",

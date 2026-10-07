@@ -1,106 +1,50 @@
+# previsao-tempo-chatbot
 
-# lumina-weather-service
+Microserviço em TypeScript que consulta a WeatherAPI e devolve a previsão dos próximos três dias para uma cidade, num JSON enxuto pensado para ser lido por um fluxo de chatbot (condição, máxima, mínima e chance de chuva por dia).
 
-Microserviço desenvolvido em TypeScript com Node.js para fornecer a previsão do tempo do evento Lumina Fest. Ele expõe uma rota HTTP `/forecast` integrada à WeatherAPI e retorna a previsão dos próximos três dias em formato estruturado, pensado para consumo por um chatbot na plataforma Blip.
+Exercício técnico: o cenário era um bot de atendimento de um evento de três dias que precisava responder "como vai estar o tempo?" sem que o fluxo do bot tivesse de interpretar a resposta completa da API de clima.
 
-## Tecnologias utilizadas
+## Como funciona
 
-- TypeScript
-- Node.js
-- Express
-- Axios
-- Dotenv
-- ngrok (para expor localmente via HTTPS)
-- WeatherAPI (integração externa)
-- Blip (canal de atendimento com chatbot)
+- `GET /forecast` monta a URL da WeatherAPI, busca a previsão e reduz a resposta ao que o bot exibe.
+- `buildWeatherUrl` e `formatWeatherResponse` são funções puras; o handler só orquestra e trata erro (HTTP 500 com mensagem genérica).
+- A chave da API vem do ambiente; o serviço não sobe sem ela.
 
-## Instalação
-
-```bash
-git clone https://github.com/seu-usuario/lumina-weather-service.git
-cd lumina-weather-service
-npm install
-```
-
-## Configuração
-
-Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
-
-```env
-WEATHER_API_KEY=4d104eef44fe43b08ba215912250904
-PORT=3000
-```
-
-A chave acima está funcional para testes com o plano gratuito da WeatherAPI: https://www.weatherapi.com/
-
-## Executando localmente
-
-```bash
-npx ts-node src/index.ts
-```
-
-Para facilitar a integração externa (como com o Blip), utilize o ngrok:
-
-```bash
-ngrok http 3000
-```
-
-Utilize a URL gerada pelo ngrok no Blip para realizar a requisição HTTP GET no endpoint `/forecast`.
-
-## Exemplo de resposta
+Exemplo de resposta:
 
 ```json
 {
   "cidade": "Aurora",
   "dias": [
-    {
-      "data": "2025-04-18",
-      "condicao": "Ensolarado",
-      "temperaturaMax": "27°C",
-      "temperaturaMin": "18°C",
-      "chanceDeChuva": "5%"
-    },
-    {
-      "data": "2025-04-19",
-      "condicao": "Parcialmente nublado",
-      "temperaturaMax": "25°C",
-      "temperaturaMin": "19°C",
-      "chanceDeChuva": "20%"
-    },
-    {
-      "data": "2025-04-20",
-      "condicao": "Chuva leve",
-      "temperaturaMax": "23°C",
-      "temperaturaMin": "20°C",
-      "chanceDeChuva": "60%"
-    }
+    { "data": "2025-04-18", "condicao": "Ensolarado", "temperaturaMax": "27°C", "temperaturaMin": "18°C", "chanceDeChuva": "5%" },
+    { "data": "2025-04-19", "condicao": "Parcialmente nublado", "temperaturaMax": "25°C", "temperaturaMin": "19°C", "chanceDeChuva": "20%" },
+    { "data": "2025-04-20", "condicao": "Chuva leve", "temperaturaMax": "23°C", "temperaturaMin": "20°C", "chanceDeChuva": "60%" }
   ]
 }
 ```
 
-## Estrutura do projeto
+## Stack
 
-- `src/index.ts`: entrada principal da aplicação
-- `buildWeatherUrl`: função pura para montar a URL da API externa
-- `formatWeatherResponse`: função pura para estruturar a resposta em um formato amigável
-- `/forecast`: rota principal que retorna os dados formatados
+Node.js 18+, TypeScript 5, Express 5, Axios, dotenv. Previsão pela [WeatherAPI](https://www.weatherapi.com/) (plano gratuito atende).
 
-## Boas práticas adotadas
+## Como rodar
 
-- Uso de funções puras e imutabilidade
-- Separação clara de responsabilidades
-- Tipagem explícita com TypeScript
-- Comentários explicativos e semânticos
-- Código preparado para testes e manutenção
+```bash
+npm install
+cp .env.example .env     # preencha WEATHER_API_KEY; LOCATION e PORT são opcionais
+npm start                # http://localhost:3000/forecast
+```
 
-## Observações
+Para ligar a um chatbot hospedado, exponha a porta com um túnel HTTPS (por exemplo `ngrok http 3000`) e aponte a requisição HTTP do fluxo para `/forecast`.
 
-- O foco deste projeto foi a resolução técnica e direta do problema central proposto: integração entre Blip e previsão climática.
-- Não foram implementados:
-  - Bot de exceptions para erros genéricos
-  - Relatórios e métricas personalizadas (trackings no Blip)
+## Testes
 
+Não há suíte de testes automatizados. `npm test` roda apenas a checagem de tipos (`tsc --noEmit`), que passa.
 
-## Objetivo do projeto
+## Status
 
-Esse microserviço foi desenvolvido como parte de um desafio técnico focado em boas práticas de backend, integração com APIs externas e construção de soluções com propósito real e foco em usabilidade.
+Concluído como exercício. Ficaram de fora: tratamento de erro específico por tipo de falha da API, cache da previsão e métricas.
+
+## Licença
+
+MIT.

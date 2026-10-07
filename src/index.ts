@@ -1,5 +1,5 @@
-// Nome do projeto: lumina-weather-service
-// Descrição: microserviço local em TypeScript para expor previsão do tempo via ngrok para uso no Blip
+// previsao-tempo-chatbot: microserviço que expõe a previsão do tempo de três dias
+// num formato simples para ser consumido por um chatbot via requisição HTTP.
 
 import express, { Request, Response } from 'express';
 import axios from 'axios';
@@ -17,8 +17,11 @@ const PORT = process.env.PORT || 3000;
 /**
  * CONFIGURAÇÕES DA API EXTERNA (WeatherAPI)
  */
-const WEATHER_API_KEY: string = process.env.WEATHER_API_KEY || '4d104eef44fe43b08ba215912250904';
-const LOCATION = 'Aurora';
+const WEATHER_API_KEY: string = process.env.WEATHER_API_KEY ?? '';
+if (!WEATHER_API_KEY) {
+  throw new Error('Defina WEATHER_API_KEY no .env (veja .env.example).');
+}
+const LOCATION = process.env.LOCATION || 'Aurora';
 const DAYS = 3; // Previsão para os três dias do evento
 const LANG = 'pt';
 
@@ -59,7 +62,7 @@ const formatWeatherResponse = (data: any) => {
 
 /**
  * Rota principal: /forecast
- * Responde com os dados climáticos da cidade do festival para os três dias de evento.
+ * Responde com a previsão da cidade configurada para os próximos três dias.
  */
 app.get('/forecast', async (_req: Request, res: Response) => {
   try {
@@ -75,8 +78,8 @@ app.get('/forecast', async (_req: Request, res: Response) => {
 
 /**
  * Inicialização do servidor local
- * Ideal para testes locais e integração com Blip via ngrok.
+ * Para testar com um chatbot hospedado, exponha a porta com um túnel HTTPS (ex.: ngrok).
  */
 app.listen(PORT, () => {
-  console.log(`🌤️ Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
