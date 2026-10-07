@@ -2,6 +2,10 @@
 
 Microserviço em TypeScript que consulta a WeatherAPI e devolve a previsão dos próximos três dias para uma cidade, num JSON enxuto pensado para ser lido por um fluxo de chatbot (condição, máxima, mínima e chance de chuva por dia).
 
+![Resposta do GET /forecast ao lado da conversa do bot do evento que usa esse JSON](docs/prints/previsao-tempo-chatbot.png)
+
+*Dados fictícios. A conversa ilustra como um bot de evento usa o JSON; o serviço entrega só a API.*
+
 Exercício técnico: o cenário era um bot de atendimento de um evento de três dias que precisava responder "como vai estar o tempo?" sem que o fluxo do bot tivesse de interpretar a resposta completa da API de clima.
 
 ## Como funciona
