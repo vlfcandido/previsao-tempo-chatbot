@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/marca/cabecalho-escuro.svg">
+  <img alt="previsao-tempo-chatbot" src="docs/marca/cabecalho-claro.svg" width="100%">
+</picture>
+
 # previsao-tempo-chatbot
 
 Microserviço em TypeScript que consulta a WeatherAPI e devolve a previsão dos próximos três dias para uma cidade, num JSON enxuto pensado para ser lido por um fluxo de chatbot (condição, máxima, mínima e chance de chuva por dia).
